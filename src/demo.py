@@ -51,6 +51,23 @@ def demo(opt):
       for stat in time_stats:
         time_str = time_str + '{} {:.3f}s |'.format(stat, ret[stat])
       print(time_str)
+      #print(ret['results'][6][0][4])
+      #Removing the null/none scored class from the score dictionary(ret)
+      dic_out = {x:y for x,y in ret['results'].items() if y.any()}
+      #print(dic_out)
+      #Removing the predicted scores<0.5 classes - ret is a value sorted dictionary so, y[0] has the largest prediction score object of the class
+      new_ret = {x:y for x,y in dic_out.items() if y[0][4]>0.5}
+      #print(new_ret)
+      count=0
+      my_dict={}
+      for i in new_ret.items():
+        #print(i[0])
+        for j in i[1]:
+          if(j[4]>0.4):
+            count+=1
+        #print("count",count)  
+        my_dict[i[0]]=count 
+      print(my_dict)
 if __name__ == '__main__':
   opt = opts().init()
   demo(opt)
